@@ -6,8 +6,12 @@ const Model = require('../models/index');
 const Todos = Model.todos;
 
 
+// update status
+// update title
+// 400 gagal menambahkan todo jika activity_group_id tidak diisi
+// // 400 gagal menambahkan todo title tidak diisi
 
-describe('IT ACTIVITIES', () => {
+describe('IT TODOS', () => {
     
  
     beforeAll((done) => {

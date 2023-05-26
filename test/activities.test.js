@@ -6,6 +6,8 @@ const Model = require('../models/index');
 const Activities = Model.activities;
 
 
+// // 400 gagal menambahkan todo title tidak diisi
+
 
 describe('IT ACTIVITIES', () => {
     
