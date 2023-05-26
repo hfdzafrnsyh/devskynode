@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+  mysql_db:
+    image: mysql:5.7
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: rootie
+    ports:
+      - 3306:3306
+  phpmyadmin_db:
+    image: phpmyadmin
+    container_name: phpmyadmin_db
+    restart: always
+    links:
+    - mysql_db
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1           
+  node_devsky:
+    container_name: devskynode
+    build:
+      context: ./
+    image: devsky
+    depends_on:
+      - mysql_db
+    ports:
+      - 3030:3030
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: rootie
+      MYSQL_ROOT_PASSWORD: rootie
+      MYSQL_DBNAME: hafidzafriansyah
+      MYSQL_HOST: 172.17.0.2
+    links:
+      - mysql_db
+    volumes:
+      - ./:/src
+    restart: unless-stopped 
+ 
+  
+   
+
+volumes:
+  db:
+    driver: local
+ 

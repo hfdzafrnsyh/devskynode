@@ -1,0 +1,33 @@
+{
+  "name": "devskynode",
+  "version": "1.0.0",
+  "description": "devsky test",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "cross-env NODE_ENV=test jest --testTimeout=10000 --forceExit",
+    "start": "sequelize db:create && sequelize db:migrate && node index.js",
+    "db:create:test": "cross-env NODE_ENV=test sequelize db:create",
+    "db:migrate:test" : "cross-env NODE_ENV=test sequelize db:migrate"
+  },
+  "author": "hfdzafrnsyh",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-validator": "^7.0.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.3.2",
+    "nodemon": "^2.0.22",
+    "sequelize": "^6.31.1"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "jest": "^29.5.0",
+    "supertest": "^6.3.3"
+  }
+}
