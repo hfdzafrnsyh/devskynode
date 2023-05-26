@@ -1,12 +1,10 @@
 const request = require('supertest');
 const app = require('../app');
-const path = require('path')
+
 
 const Model = require('../models/index');
 const Activities = Model.activities;
 
-
-// // 400 gagal menambahkan todo title tidak diisi
 
 
 describe('IT ACTIVITIES', () => {
@@ -58,6 +56,28 @@ describe('IT ACTIVITIES', () => {
                             email: expect.any(String),
                             title: expect.any(String),  
                        })
+                    })
+                )
+            })
+    })
+
+
+    test(`it post activity but title null 400 response`, () => {
+        let data = {
+            email : "email@test.com"
+        }
+
+        return request(app).post('/activity-groups')
+            .send(data)
+            .expect('Content-Type', /json/)
+            .expect(400)
+            .then((res) => {
+                expect(res.body).toEqual(
+                    expect.objectContaining({
+                        status: 'bad request',
+                        error: expect.objectContaining({
+                            title : expect.any(String)
+                        })
                     })
                 )
             })
@@ -151,7 +171,7 @@ describe('IT ACTIVITIES', () => {
 
 
     test(`it delete activity `, () => {
-        let activityId=12;
+        let activityId=14;
 
         return request(app).delete(`/activity-groups/${activityId}`)
             .expect('Content-Type', /json/)

@@ -6,12 +6,8 @@ const Model = require('../models/index');
 const Todos = Model.todos;
 
 
-// update status
-// update title
-// 400 gagal menambahkan todo jika activity_group_id tidak diisi
-// // 400 gagal menambahkan todo title tidak diisi
 
-describe('IT TODOS', () => {
+describe('IT Todos', () => {
     
  
     beforeAll((done) => {
@@ -35,6 +31,25 @@ describe('IT TODOS', () => {
                                 is_active:expect.any(Boolean),
                                 priority:expect.any(String)
                             })
+                        ])
+                    })
+                )
+            })
+    })
+
+
+
+    test(`it get todos with Query`, () => {
+        let activityId=3;
+        return request(app).get(`/todo-items?activity_group_id=${activityId}`)
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .then((res) => {
+                expect(res.body).toEqual(
+                    expect.objectContaining({
+                        success: 'Success',
+                        message: 'Success',
+                        data: expect.arrayContaining([
                         ])
                     })
                 )
@@ -70,6 +85,60 @@ describe('IT TODOS', () => {
                 )
             })
     })
+
+
+
+
+    test(`it post todos but activityID null 400 response `, () => {
+      
+        const data = {
+            title: "test todo",
+            priority: "very-low",
+            is_active: true
+        }
+
+        return request(app).post('/todo-items')
+            .send(data)
+            .expect('Content-Type', /json/)
+            .expect(400)
+            .then((res) => {
+                expect(res.body).toEqual(
+                    expect.objectContaining({
+                        status: 'bad request',
+                        error: expect.objectContaining({
+                            activity_group_id : expect.any(String)
+                        })
+                    })
+                )
+            })
+    })
+
+
+
+    test(`it post todos but title null 400 response `, () => {
+      
+        const data = {
+            activity_group_id:1,
+            priority: "very-low",
+            is_active: true
+        }
+
+        return request(app).post('/todo-items')
+            .send(data)
+            .expect('Content-Type', /json/)
+            .expect(400)
+            .then((res) => {
+                expect(res.body).toEqual(
+                    expect.objectContaining({
+                        status: 'bad request',
+                        error: expect.objectContaining({
+                            title : expect.any(String)
+                        })
+                    })
+                )
+            })
+    })
+
 
 
 
@@ -113,12 +182,47 @@ describe('IT TODOS', () => {
             })
     })
 
+
+
+
+    test(`it put todos status by ID`, () => {
+      
+        let todoId=1;
+        
+
+        const data = {
+            title: "test todo",
+            priority: "very-low",
+            activity_group_id: "1",
+            is_active: false
+        }
+
+        return request(app).put(`/todo-items/${todoId}`)
+            .send(data)
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .then((res) => {
+                expect(res.body).toEqual(
+                    expect.objectContaining({
+                       success : 'Success',
+                       message : 'Success',
+                       data : expect.objectContaining({
+                            title: expect.any(String),
+                            priority: expect.any(String),
+                            is_active: expect.any(Boolean)
+                       })
+                    })
+                )
+            })
+    })
+
+
      
-    test(`it put todos by ID `, () => {
+    test(`it put todos title by ID `, () => {
         let todoId=1;
         
         const data = {
-            title: "test todo",
+            title: "update title todo",
             priority: "very-low",
             activity_group_id: "1",
             is_active: true
@@ -170,7 +274,7 @@ describe('IT TODOS', () => {
 
 
     test(`it delete todos `, () => {
-        let todoId=12;
+        let todoId=14;
 
         return request(app).delete(`/todo-items/${todoId}`)
             .expect('Content-Type', /json/)
