@@ -61,11 +61,129 @@ describe('IT ACTIVITIES', () => {
             })
     })
 
+
+
+    test(`it get one by ID activity `, () => {
+      
+        let activityId=1;
+
+        return request(app).get(`/activity-groups/${activityId}`)
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .then((res) => {
+                expect(res.body).toEqual(
+                    expect.objectContaining({
+                       success : 'Success',
+                       message : 'Success',
+                       data : expect.objectContaining({
+                            email: expect.any(String),
+                            title: expect.any(String),  
+                       })
+                    })
+                )
+            })
+    })
+
     
+    test(`it get one by ID activity but 404 response `, () => {
+      
+        let activityId=9999;
+
+        return request(app).get(`/activity-groups/${activityId}`)
+            .expect('Content-Type', /json/)
+            .expect(404)
+            .then((res) => {
+                expect(res.body).toEqual(
+                    expect.objectContaining({
+                       status : 'Not Found',
+                       message: `Activity with ID ${activityId} Not Found`
+                    })
+                )
+            })
+    })
+
+     
+    test(`it put activity `, () => {
+        let activityId=1;
+        let data = {
+            title : "testlahbro",
+        }
+
+        return request(app).put(`/activity-groups/${activityId}`)
+            .send(data)
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .then((res) => {
+                expect(res.body).toEqual(
+                    expect.objectContaining({
+                       success : 'Success',
+                       message : 'Success',
+                       data : expect.objectContaining({
+                            title: expect.any(String)
+                       })
+                    })
+                )
+            })
+    })
 
 
+    test(`it put activity but 404 response`, () => {
+        let activityId=999;
+        let data = {
+            title : "testlahbro",
+        }
 
-    
+        return request(app).put(`/activity-groups/${activityId}`)
+            .send(data)
+            .expect('Content-Type', /json/)
+            .expect(404)
+            .then((res) => {
+                expect(res.body).toEqual(
+                    expect.objectContaining({
+                        status : 'Not Found',
+                        message: `Activity with ID ${activityId} Not Found`
+                     })
+                )
+            })
+    })
+
+
+    test(`it delete activity `, () => {
+        let activityId=6;
+
+        return request(app).delete(`/activity-groups/${activityId}`)
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .then((res) => {
+                expect(res.body).toEqual(
+                    expect.objectContaining({
+                       success : 'Success',
+                       message : 'Success',
+                       data : expect.objectContaining({
+                       })
+                    })
+                )
+            })
+    })
+
+
+    test(`it delete activity but 404 response`, () => {
+        let activityId=999;
+
+        return request(app).delete(`/activity-groups/${activityId}`)
+            .expect('Content-Type', /json/)
+            .expect(404)
+            .then((res) => {
+                expect(res.body).toEqual(
+                    expect.objectContaining({
+                        status : 'Not Found',
+                        message: `Activity with ID ${activityId} Not Found`
+                     })
+                )
+            })
+    })
+
+
 
     afterAll( () => {
         Activities.sequelize.close()
