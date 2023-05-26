@@ -1,9 +1,9 @@
 const request = require('supertest');
 const app = require('../app');
-const path = require('path')
+
 
 const Model = require('../models/index');
-const Activities = Model.activities;
+const Todos = Model.todos;
 
 
 
@@ -16,8 +16,8 @@ describe('IT ACTIVITIES', () => {
 
 
    
-    test(`it get activity `, () => {
-        return request(app).get('/activity-groups')
+    test(`it get todos `, () => {
+        return request(app).get('/todo-items')
             .expect('Content-Type', /json/)
             .expect(200)
             .then((res) => {
@@ -27,8 +27,9 @@ describe('IT ACTIVITIES', () => {
                         message: 'Success',
                         data: expect.arrayContaining([
                             expect.objectContaining({
-                                email: expect.any(String),
-                                title: expect.any(String)
+                                title: expect.any(String),
+                                is_active:expect.any(Boolean),
+                                priority:expect.any(String)
                             })
                         ])
                     })
@@ -38,12 +39,16 @@ describe('IT ACTIVITIES', () => {
 
 
 
-    test(`it post activity `, () => {
-        let data = {
-            title : "test",
-            email : "email@test.com"
+    test(`it post todos `, () => {
+      
+        const data = {
+            title: "test todo",
+            priority: "very-low",
+            activity_group_id: "1",
+            is_active: true
         }
-        return request(app).post('/activity-groups')
+
+        return request(app).post('/todo-items')
             .send(data)
             .expect('Content-Type', /json/)
             .expect(200)
@@ -53,8 +58,9 @@ describe('IT ACTIVITIES', () => {
                        success : 'Success',
                        message : 'Success',
                        data : expect.objectContaining({
-                            email: expect.any(String),
-                            title: expect.any(String),  
+                            title: expect.any(String),
+                            priority: expect.any(String),
+                            is_active: expect.any(Boolean)
                        })
                     })
                 )
@@ -63,11 +69,11 @@ describe('IT ACTIVITIES', () => {
 
 
 
-    test(`it get one by ID activity `, () => {
+    test(`it get one by ID todos `, () => {
       
-        let activityId=1;
+        let todoId=1;
 
-        return request(app).get(`/activity-groups/${activityId}`)
+        return request(app).get(`/todo-items/${todoId}`)
             .expect('Content-Type', /json/)
             .expect(200)
             .then((res) => {
@@ -76,8 +82,9 @@ describe('IT ACTIVITIES', () => {
                        success : 'Success',
                        message : 'Success',
                        data : expect.objectContaining({
-                            email: expect.any(String),
-                            title: expect.any(String),  
+                            title: expect.any(String),
+                            priority: expect.any(String),
+                            is_active: expect.any(Boolean)
                        })
                     })
                 )
@@ -85,31 +92,35 @@ describe('IT ACTIVITIES', () => {
     })
 
     
-    test(`it get one by ID activity but 404 response `, () => {
+    test(`it get one by ID todos but 404 response `, () => {
       
-        let activityId=9999;
+        let todoId=9999;
 
-        return request(app).get(`/activity-groups/${activityId}`)
+        return request(app).get(`/todo-items/${todoId}`)
             .expect('Content-Type', /json/)
             .expect(404)
             .then((res) => {
                 expect(res.body).toEqual(
                     expect.objectContaining({
-                       status : 'Not Found',
-                       message: `Activity with ID ${activityId} Not Found`
+                        status: "Not Found",
+                        message: `Todo with ID ${todoId} Not Found`
                     })
                 )
             })
     })
 
      
-    test(`it put activity by ID `, () => {
-        let activityId=1;
-        let data = {
-            title : "testlahbro",
+    test(`it put todos by ID `, () => {
+        let todoId=1;
+        
+        const data = {
+            title: "test todo",
+            priority: "very-low",
+            activity_group_id: "1",
+            is_active: true
         }
 
-        return request(app).put(`/activity-groups/${activityId}`)
+        return request(app).put(`/todo-items/${todoId}`)
             .send(data)
             .expect('Content-Type', /json/)
             .expect(200)
@@ -119,7 +130,9 @@ describe('IT ACTIVITIES', () => {
                        success : 'Success',
                        message : 'Success',
                        data : expect.objectContaining({
-                            title: expect.any(String)
+                            title: expect.any(String),
+                            priority: expect.any(String),
+                            is_active: expect.any(Boolean)
                        })
                     })
                 )
@@ -127,57 +140,58 @@ describe('IT ACTIVITIES', () => {
     })
 
 
-    test(`it put activity by ID but 404 response`, () => {
-        let activityId=999;
-        let data = {
-            title : "testlahbro",
+    test(`it put todos by ID but 404 response`, () => {
+        let todoId=111111;
+        
+        const data = {
+            title: "test todo",
+            priority: "very-low",
+            activity_group_id: "1",
+            is_active: true
         }
 
-        return request(app).put(`/activity-groups/${activityId}`)
+        return request(app).put(`/todo-items/${todoId}`)
             .send(data)
             .expect('Content-Type', /json/)
             .expect(404)
             .then((res) => {
                 expect(res.body).toEqual(
                     expect.objectContaining({
-                        status : 'Not Found',
-                        message: `Activity with ID ${activityId} Not Found`
+                        status: "Not Found",
+                        message: `Todo with ID ${todoId} Not Found`
                      })
                 )
             })
     })
 
 
-    test(`it delete activity `, () => {
-        let activityId=12;
+    test(`it delete todos `, () => {
+        let todoId=12;
 
-        return request(app).delete(`/activity-groups/${activityId}`)
+        return request(app).delete(`/todo-items/${todoId}`)
             .expect('Content-Type', /json/)
             .expect(200)
             .then((res) => {
                 expect(res.body).toEqual(
                     expect.objectContaining({
-                       success : 'Success',
-                       message : 'Success',
-                       data : expect.objectContaining({
-                       })
+                          title: expect.any(String)
                     })
                 )
             })
     })
 
 
-    test(`it delete activity but 404 response`, () => {
-        let activityId=999;
+    test(`it delete todo but 404 response`, () => {
+        let todoId=999;
 
-        return request(app).delete(`/activity-groups/${activityId}`)
+        return request(app).delete(`/todo-items/${todoId}`)
             .expect('Content-Type', /json/)
             .expect(404)
             .then((res) => {
                 expect(res.body).toEqual(
                     expect.objectContaining({
-                        status : 'Not Found',
-                        message: `Activity with ID ${activityId} Not Found`
+                        status: "Not Found",
+                        message: `Todo with ID ${todoId} Not Found`
                      })
                 )
             })
@@ -186,7 +200,7 @@ describe('IT ACTIVITIES', () => {
 
 
     afterAll( () => {
-        Activities.sequelize.close()
+        Todos.sequelize.close()
     })
 
 })
