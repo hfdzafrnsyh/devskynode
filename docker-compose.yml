@@ -23,7 +23,7 @@ services:
     container_name: devskynode
     build:
       context: ./
-    image: devsky
+    image: devskynode
     depends_on:
       - mysql_db
     ports:
@@ -32,7 +32,7 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: rootie
       MYSQL_ROOT_PASSWORD: rootie
-      MYSQL_DBNAME: hafidzafriansyah
+      MYSQL_DBNAME: hafidz_afriansyah
       MYSQL_HOST: 172.17.0.2
     links:
       - mysql_db

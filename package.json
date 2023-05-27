@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000 --forceExit",
-    "start": "sequelize db:create && sequelize db:migrate && node index.js",
+    "start": "sequelize db:create && sequelize db:migrate && npm run db:create:test && npm run db:migrate:test && node index.js",
     "db:create:test": "cross-env NODE_ENV=test sequelize db:create",
     "db:migrate:test" : "cross-env NODE_ENV=test sequelize db:migrate"
   },
