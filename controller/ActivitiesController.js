@@ -1,4 +1,4 @@
-const activities = require("../models/activities");
+
 const Model = require("../models/index");
 const Activities = Model.activities;
 

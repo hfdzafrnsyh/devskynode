@@ -28,12 +28,6 @@ services:
       - mysql_db
     ports:
       - 3030:3030
-    environment:
-      MYSQL_USER: root
-      MYSQL_PASSWORD: rootie
-      MYSQL_ROOT_PASSWORD: rootie
-      MYSQL_DBNAME: hafidz_afriansyah
-      MYSQL_HOST: 172.17.0.2
     links:
       - mysql_db
     volumes:
