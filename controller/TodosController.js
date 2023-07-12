@@ -18,7 +18,7 @@ module.exports.getAll = async (req, res) => {
             })
 
         } else {
-            const todos = await Todos.findAll({})
+            const todos = await Todos.findAll({ include: ['activities']})
 
             res.status(200).json({
                 success: 'Success',
